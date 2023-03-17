@@ -4,6 +4,9 @@
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
+  "api": {
+    "baseUrl": "https://api.oneslipstream.com/v1"
+  },
   "favicon": "/favicon.png",
   "colors": {
     "primary": "#F81660",
@@ -30,8 +33,42 @@
   ],
   "navigation": [
     {
-      "group": "Slipstream API",
+      "group": "Introduction",
       "pages": ["overview"]
+    },
+    {
+      "group": "Slipstream API",
+      "pages": [
+        {
+          "group": "Consumer",
+          "pages": [
+            "consumer/create",
+            "consumer/retrieves",
+            "consumer/updates",
+            "consumer/deletes"
+          ]
+        },
+        {
+          "group": "Search",
+          "pages": ["search/create", "search/retrieves"]
+        },
+        {
+          "group": "Consumer Account",
+          "pages": [
+            "consumer-account/create",
+            "consumer-account/list",
+            "consumer-account/retrieves"
+          ]
+        },
+        {
+          "group": "Account Event",
+          "pages": [
+            "account-event/creates",
+            "account-event/list",
+            "account-event/retrieves"
+          ]
+        }
+      ]
     }
   ],
   "footerSocials": {

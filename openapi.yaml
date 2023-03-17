@@ -1,0 +1,2099 @@
+openapi: 3.0.3
+info:
+  title: Slipstream API
+  description: This is the slipstream API.
+  termsOfService: https://oneslipstream.com/terms/
+  contact:
+    email: dev@oneslipstream.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.8.0
+servers:
+  - url: https://api.oneslipstream.com/{basePath}
+    variables:
+      basePath:
+        default: v1
+tags:
+  - name: Consumer
+  - name: Search
+  - name: Consumer Account
+  - name: Account Event
+paths:
+  /consumer:
+    post:
+      summary: Create a consumer
+      description: Create a consumer object
+      tags:
+        - Consumer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateConsumer"
+      responses:
+        "200":
+          description: A consumer object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetConsumer"
+  /consumer/{id}:
+    get:
+      summary: Retrieves a consumer
+      description: Retrieves a consumer object
+      tags:
+        - Consumer
+      parameters:
+        - name: id
+          in: path
+          description: The id of the consumer
+          required: true
+          schema:
+            type: string
+            example: con_bPKKB3sYsukFanSsaBcMCMR2
+      responses:
+        "200":
+          description: A consumer object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetConsumer"
+    patch:
+      summary: Updates a consumer
+      description: Updates a consumer object
+      tags:
+        - Consumer
+      parameters:
+        - name: id
+          in: path
+          description: The id of the consumer
+          required: true
+          schema:
+            type: string
+            example: con_bPKKB3sYsukFanSsaBcMCMR2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateConsumer"
+      responses:
+        "200":
+          description: A consumer object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetConsumer"
+    delete:
+      summary: Deletes a consumer
+      description: Deletes a consumer object
+      tags:
+        - Consumer
+      parameters:
+        - name: id
+          in: path
+          description: The id of the consumer
+          required: true
+          schema:
+            type: string
+            example: con_bPKKB3sYsukFanSsaBcMCMR2
+      responses:
+        "200":
+          description: A consumer object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The identifier of the deleted consumer
+                    example: con_bPKKB3sYsukFanSsaBcMCMR2
+                  deleted:
+                    type: boolean
+                    description: Whether the consumer was deleted
+                    example: true
+  /search:
+    post:
+      summary: Create a search
+      description: Run a credit search
+      tags:
+        - Search
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                consumer:
+                  type: string
+                  description: The identifier of the consumer to search
+                  example: con_bPKKB3sYsukFanSsaBcMCMR2
+                searchPurpose:
+                  type: string
+                  enum:
+                    - quotation
+                    - credit_application
+                  description: |
+                    The purpose of the search.
+                      * `quotation` - Used prior to a credit application to offer a quote (sometimes called a soft search)
+                      * `credit_application` - Used when credit checking any form of application for consumer credit
+                  example: quotation
+              required:
+                - consumer
+                - searchPurpose
+      responses:
+        "200":
+          description: A credit report object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCreditReport"
+  /search/{id}:
+    get:
+      summary: Retrieves a search
+      description: Retrieves a search object
+      tags:
+        - Search
+      parameters:
+        - name: id
+          in: path
+          description: The id of the search
+          required: true
+          schema:
+            type: string
+            example: srch_bPKKB3sYsukFanSsaBcMCMR2
+      responses:
+        "200":
+          description: A credit report object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCreditReport"
+  /account:
+    post:
+      summary: Create a consumer account
+      description: Create a consumer account object
+      tags:
+        - Consumer Account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateConsumerAccount"
+      responses:
+        "200":
+          description: A consumer account object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetConsumerAccount"
+    get:
+      summary: List consumer accounts
+      description: List consumer accounts
+      tags:
+        - Consumer Account
+      parameters:
+        - name: consumer
+          in: query
+          description: The identifier of the consumer to list accounts for
+          required: true
+          schema:
+            type: string
+            example: con_bPKKB3sYsukFanSsaBcMCMR2
+      responses:
+        "200":
+          description: A list of consumer account objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GetConsumerAccount"
+  /account/{id}:
+    get:
+      summary: Retrieves a consumer account
+      description: Retrieves a consumer account object
+      tags:
+        - Consumer Account
+      parameters:
+        - name: id
+          in: path
+          description: The id of the account
+          required: true
+          schema:
+            type: string
+            example: acc_bPKKB3sYsukFanSsaBcMCMR2
+      responses:
+        "200":
+          description: A consumer account object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetConsumerAccount"
+  /account_event:
+    post:
+      summary: Creates a report event
+      description: Creates a new report event object
+      tags:
+        - Account Event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateReportEvent"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetReportEvent"
+    get:
+      summary: List report events
+      description: Retrieves a list of report event objects
+      tags:
+        - Account Event
+      parameters:
+        - name: consumerAccount
+          in: query
+          description:
+            The identifier of the consumer account to list submitted report
+            events for
+          required: false
+          schema:
+            type: string
+            example: acc_bPKKB3sYsukFanSsaBcMCMR2
+        - name: expand
+          in: query
+          description: Fields to expand into objects
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - consumerAccount
+            example:
+              - consumerAccount
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GetReportEvent"
+  /account_event/{id}:
+    get:
+      summary: Retrieves a report event
+      description: Retrieves a report event object
+      tags:
+        - Account Event
+      parameters:
+        - name: id
+          in: path
+          description: The identifier of the report object
+          required: true
+          schema:
+            type: string
+            example: re_bPKKB3sYsukFanSsaBcMCMR2
+        - name: expand
+          in: query
+          description: Fields to expand into objects
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - consumerAccount
+            example:
+              - consumerAccount
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GetReportEvent"
+components:
+  schemas:
+    Consumer:
+      $ref: "#/components/schemas/CreateConsumer"
+    ConsumerResponse:
+      $ref: "#/components/schemas/GetConsumer"
+    ConsumerAccount:
+      $ref: "#/components/schemas/CreateConsumerAccount"
+    ConsumerAccountResponse:
+      $ref: "#/components/schemas/GetConsumerAccount"
+    CreditReport:
+      $ref: "#/components/schemas/GetCreditReport"
+    ReportEvent:
+      $ref: "#/components/schemas/CreateReportEvent"
+    ReportEventResponse:
+      $ref: "#/components/schemas/GetReportEvent"
+    Address:
+      type: object
+      properties:
+        abodeName:
+          type: string
+          nullable: true
+          maxLength: 30
+          example: THE OLD BARN
+          description: The name or number of the abode
+        buildingNumber:
+          type: string
+          nullable: true
+          maxLength: 12
+          example: FLAT 8A
+          description: The building number
+        buildingName:
+          type: string
+          nullable: true
+          maxLength: 50
+          example: HOME FARM COTTAGES
+          description: The building name
+        street1:
+          type: string
+          nullable: true
+          maxLength: 50
+          example: CROSS LANE
+          description: Address line 1 (e.g., street)
+        street2:
+          type: string
+          nullable: true
+          maxLength: 50
+          example: HIGH STREET
+          description:
+            Address line 2 (e.g., apartment, suite, unit, or building).
+        subLocality:
+          type: string
+          nullable: true
+          maxLength: 35
+          example: null
+          description: The name of the neighborhood
+        locality:
+          type: string
+          nullable: true
+          maxLength: 35
+          example: Greater London
+          description: The city or district
+        town:
+          type: string
+          nullable: true
+          maxLength: 25
+          example: London
+          description: The town
+        postcode:
+          type: string
+          nullable: true
+          maxLength: 8
+          example: W1A 1AA
+          description: The postal code
+      required:
+        - street1
+        - locality
+        - town
+        - postcode
+    CreateConsumer:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 30
+          example: MRS
+          description: The customer's title
+        firstname:
+          type: string
+          maxLength: 30
+          example: MARY
+          description: The customer's firstname
+        othername:
+          type: string
+          nullable: true
+          maxLength: 30
+          example: ELIZABETH
+          description: The customer's middle names or initials
+        lastname:
+          type: string
+          maxLength: 30
+          example: TRUSS
+          description: The customer's lastname
+        dob:
+          type: string
+          format: date-time
+          example: "1975-07-26T00:00:00.000Z"
+          description: The applicant's date of birth
+        address:
+          allOf:
+            - description: The customer's address
+            - $ref: "#/components/schemas/Address"
+        description:
+          type: string
+          description: An arbitrary string attached to the object
+          example: The prime minister
+        metadata:
+          type: object
+          description:
+            Set of key-value pairs that you can attach to an object, useful for
+            storing additional information about the object in a structured
+            format
+          example:
+            nickname: Liz
+          additionalProperties:
+            type: string
+      required:
+        - title
+        - firstname
+        - lastname
+        - dob
+        - address
+    GetConsumer:
+      allOf:
+        - $ref: "#/components/schemas/CreateConsumer"
+        - properties:
+            id:
+              type: string
+              example: con_bPKKB3sYsukFanSsaBcMCMR2
+              description: Unique identifier for the object
+          required:
+            - id
+    title:
+      type: string
+      nullable: true
+      maxLength: 30
+      example: MRS
+    firstname:
+      type: string
+      maxLength: 30
+      example: MARY
+    othername:
+      type: string
+      maxLength: 30
+      example: ELIZABETH
+    lastname:
+      type: string
+      maxLength: 30
+      example: TRUSS
+    dob:
+      type: string
+      format: date-time
+      example: "1975-07-26T00:00:00.000Z"
+    optionalCurrent:
+      type: string
+      format: date-time
+      nullable: true
+      example: "2022-09-06T00:00:00.000Z"
+    Summary:
+      type: object
+      properties:
+        searches:
+          type: object
+          nullable: true
+          properties:
+            last3m:
+              type: integer
+              format: int32
+              minimum: 1
+              maximum: 9999999999
+              example: 4
+              description: The total number of searches over last 3 months
+            last3mHome:
+              type: integer
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              example: 9
+              description:
+                The total number of home credit searches over last 3 months
+            last12m:
+              type: integer
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              example: 9
+              description: The total number of searches over last 12 months
+          required:
+            - last3m
+            - last3mHome
+            - last12m
+        judgments:
+          type: object
+          nullable: true
+          properties:
+            total:
+              type: integer
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              nullable: true
+              example: 12
+              description: The total number of Judgments
+            last36m:
+              type: integer
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              nullable: true
+              example: 12
+              description:
+                The total number of Judgments in last 3 years (36 months)
+            active:
+              type: integer
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              nullable: true
+              example: 12
+              description: The total number of active Judgments
+            satisfied:
+              type: integer
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              nullable: true
+              example: 12
+              description: The total number of satisfied Judgments
+            activeAmount:
+              type: integer
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              nullable: true
+              example: 12
+              description: The total value of active Judgments
+            satisfiedAmount:
+              type: integer
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              nullable: true
+              example: 12
+              description: The total value of satisfied Judgments
+        bais:
+          type: object
+          nullable: true
+          properties:
+            discharged:
+              type: integer
+              nullable: true
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              example: 12
+              description: The total number of discharged insolvencies
+            isInsolvent:
+              type: boolean
+              example: false
+              description: Whether the applicant is currently insolvent
+            isRestricted:
+              type: boolean
+              nullable: true
+              example: false
+              description:
+                Whether the applicant is restricted from applying for credit due
+                to insolvency proceedings
+          required:
+            - isInsolvent
+        notices:
+          type: object
+          nullable: true
+          properties:
+            hasCorrectionNotice:
+              type: boolean
+              example: false
+              description: Whether the applicant has a Notice of Correction
+            disputes:
+              type: integer
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              example: 12
+              description: The total number of disputes on a file
+          required:
+            - hasCorrectionNotice
+            - disputes
+        links:
+          type: object
+          nullable: true
+          properties:
+            undeclaredAddresses:
+              type: integer
+              nullable: true
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              example: 12
+              description: The total number of undeclared Address Links
+            undeclaredAddressesSearched:
+              type: integer
+              nullable: true
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              example: 12
+              description: The total number of undeclared Address Links searched
+            undeclaredAddressesUnsearched:
+              type: integer
+              nullable: true
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              example: 12
+              description:
+                The total number of undeclared Address Links unsearched
+            undeclaredAliases:
+              type: integer
+              nullable: false
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              example: 12
+              description: The total number of undeclared Alias Links
+            undeclaredAssociates:
+              type: integer
+              nullable: true
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              example: 12
+              description:
+                The total number of undeclared Associate Links identified
+          required:
+            - undeclaredAliases
+        computed:
+          type: object
+          properties:
+            accounts:
+              type: object
+              properties:
+                total:
+                  type: integer
+                  nullable: false
+                  format: int32
+                  minimum: 0
+                  maximum: 9999999999
+                  example: 12
+                  description: The total number of SHARE accounts
+                active:
+                  type: integer
+                  nullable: true
+                  format: int32
+                  minimum: 0
+                  maximum: 9999999999
+                  example: 12
+                  description: The total number of active SHARE accounts
+                settled:
+                  type: integer
+                  nullable: true
+                  format: int32
+                  minimum: 0
+                  maximum: 9999999999
+                  example: 12
+                  description: The total number of settled SHARE accounts
+                opened:
+                  type: object
+                  properties:
+                    last6m:
+                      type: integer
+                      nullable: false
+                      format: int32
+                      minimum: 0
+                      maximum: 9999999999
+                      example: 12
+                      description:
+                        The total number of SHARE accounts opened in the last 6
+                        months
+                  required:
+                    - last6m
+                worstPay:
+                  type: object
+                  properties:
+                    last12m:
+                      type: integer
+                      nullable: true
+                      format: int32
+                      minimum: 0
+                      maximum: 9999999999
+                      example: 12
+                      description:
+                        The worst payment status in the last 12 months
+                    last36m:
+                      type: integer
+                      nullable: true
+                      format: int32
+                      minimum: 0
+                      maximum: 9999999999
+                      example: 12
+                      description:
+                        The worst payment status in the last 36 months
+                delinquencies:
+                  type: object
+                  properties:
+                    last12m:
+                      type: integer
+                      nullable: true
+                      format: int32
+                      minimum: 0
+                      maximum: 9999999999
+                      example: 12
+                      description:
+                        The total number of delinquencies in the last 12 months
+                defaults:
+                  type: object
+                  properties:
+                    last12m:
+                      type: integer
+                      nullable: false
+                      format: int32
+                      minimum: 0
+                      maximum: 9999999999
+                      example: 12
+                      description:
+                        The total number of defaults in the last 12 months
+                    last36m:
+                      type: integer
+                      nullable: false
+                      format: int32
+                      minimum: 0
+                      maximum: 9999999999
+                      example: 12
+                      description:
+                        The total number of defaults in the last 36 months
+                  required:
+                    - last12m
+                    - last36m
+              required:
+                - total
+                - opened
+                - worstPay
+                - delinquencies
+                - defaults
+          required:
+            - accounts
+        indebt:
+          type: object
+          nullable: true
+          properties:
+            totalBalancesActive:
+              type: number
+              nullable: true
+              format: int32
+              minimum: 0
+              maximum: 99999999999
+              example: 12
+              description: The total balance of active accounts
+            totalBalancesRevolve:
+              type: number
+              nullable: true
+              format: int32
+              minimum: 0
+              maximum: 99999999999
+              example: 12
+              description:
+                Total balances for all account group 3 Accounts (Revolving
+                Credit and Budget)
+            balanceLimitRatioRevolve:
+              type: number
+              nullable: true
+              format: int32
+              minimum: 0
+              maximum: 99999999999
+              example: 12
+              description:
+                The % ratio of balance to limits for all account group 3
+                Accounts (Revolving Credit and Budget)
+            totalLimitsRevolve:
+              type: number
+              nullable: true
+              format: int32
+              minimum: 0
+              maximum: 99999999999
+              example: 12
+              description:
+                Total limits for all active account group 3 Accounts (Revolving
+                Credit and Budget)
+            totalBalancesLoans:
+              type: number
+              nullable: true
+              format: int32
+              minimum: 0
+              maximum: 99999999999
+              example: 12
+              description:
+                Total balances for all account group 1 accounts
+                (Loans/Installment Credit)
+            totalBalancesMortgages:
+              type: number
+              nullable: true
+              format: int32
+              minimum: 0
+              maximum: 99999999999
+              example: 12
+              description:
+                Total balances for all account group 2 accounts (Mortgage
+                Accounts)
+        thirdPartyData:
+          type: object
+          nullable: true
+          properties:
+            alertDecision:
+              type: number
+              nullable: false
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              example: 12
+              description:
+                Level of data requested and returned for Alert Decision
+                individuals
+            alertReview:
+              type: number
+              nullable: false
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              example: 12
+              description:
+                Level of data requested and returned for Alert Review
+                Individuals
+            householdOverride:
+              type: number
+              nullable: false
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              example: 12
+              description:
+                Level of data requested and returned for Household Override
+                Individuals
+          required:
+            - alertDecision
+            - alertReview
+            - householdOverride
+        addressStatus:
+          type: object
+          nullable: true
+          properties:
+            inPostalAddressFile:
+              type: boolean
+              nullable: false
+              example: true
+              description:
+                A value of true indicates that the address was found in the
+                Postal Address File
+            inElectoralRoll:
+              type: boolean
+              nullable: true
+              example: true
+              description:
+                A value of true indicates that the Electoral Roll information is
+                based on the rolling Electoral Roll
+            messageCode:
+              type: number
+              nullable: true
+              format: int32
+              minimum: 0
+              maximum: 9999999999
+              example: 12
+              description:
+                Message code indicating the level of confirmation (extended for
+                current address)
+          required:
+            - pafValid
+            - messageCode
+      required:
+        - notices
+        - summaryAddress
+        - share
+    SupplierCode:
+      type: string
+      enum:
+        - agricultural_finance
+        - bank_finance
+        - bank
+        - building_society
+        - transunion
+        - credit_broker
+        - credit_card_company
+        - cc_consumer_data_capture
+        - credit_union
+        - debt_collection_agency
+        - eurodirect
+        - factoring
+        - finance_housing
+        - finance_house
+        - government
+        - home_credit
+        - home_shopping
+        - insurance_company
+        - internet_on_line_service
+        - leasing_company
+        - mortgage_company
+        - motor_vehicle_finance_company
+        - mail_order
+        - rental_company
+        - retailer
+        - securities
+        - student_loan
+        - stockbroker
+        - telecommunications_supplier
+        - utility
+        - vehicle_rental
+      example: bank
+      description: |
+        The supplier code for the account:
+          * `agricultural_finance` - Agricultural Finance
+          * `bank_finance` - Bank Finance
+          * `bank` - Bank
+          * `building_society` - Building Society
+          * `transunion` - TransUnion
+          * `credit_broker` - Credit Broker
+          * `credit_card_company` - Credit Card Company
+          * `cc_consumer_data_capture` - CC Consumer Data Capture
+          * `credit_union` - Credit Union
+          * `debt_collection_agency` - Debt Collection Agency
+          * `eurodirect` - EuroDirect
+          * `factoring` - Factoring
+          * `finance_housing` - Finance Housing
+          * `finance_house` - Finance House
+          * `government` - Government
+          * `home_credit` - Home Credit
+          * `home_shopping` - Home Shopping
+          * `insurance_company` - Insurance Company
+          * `internet_on_line_service` - Internet/On Line Service
+          * `leasing_company` - Leasing Company
+          * `mortgage_company` - Mortgage Company
+          * `motor_vehicle_finance_company` - Motor Vehicle Finance Company
+          * `mail_order` - Mail Order
+          * `rental_company` - Rental Company
+          * `retailer` - Retailer
+          * `securities` - Securities
+          * `student_loan` - Student Loan
+          * `stockbroker` - Stockbroker
+          * `telecommunications_supplier` - Telecommunications Supplier
+          * `utility` - Utility
+          * `vehicle_rental` - Vehicle Rental
+    AccountHolderStatus:
+      type: string
+      enum:
+        - deceased
+        - gone_away
+        - normal
+        - guardian
+        - uncontactable
+      example: normal
+      description: |
+        The status of the account holder * `deceased` - The account holder is deceased * `gone_away` - The account holder has gone away * `normal` - The account holder is normal * `guardian` - The account holder is a Guardian/Power of Attorney * `uncontactable` - The account holder is uncontactable
+    optional:
+      type: string
+      format: date-time
+      nullable: true
+      example: "1975-07-26T00:00:00.000Z"
+    AccountStatus:
+      type: string
+      enum:
+        - early_delinquency
+        - arrangement_to_pay
+        - sustained_delinquency
+        - debt_assignment
+        - default
+        - debt_management_program
+        - deferred_start
+        - dormant_inactive_account
+        - third_party_payment
+        - insurance_claim_pending
+        - low_start_repayment_plan
+        - minimum_payment
+        - overpayment_in_arrears
+        - okay
+        - overpayment
+        - payment_holiday
+        - partial_settlement
+        - query
+        - account_reinstatement
+        - enforced_repossession
+        - satisfied
+        - settled_closed
+        - unclassified
+        - voluntary_arrangement
+        - voluntary_repossession
+        - voluntary_termination
+      example: satisfied
+      description: |
+        The status code for the account:
+          * `early_delinquency` - General code to indicate early delinquency
+          * `arrangement_to_pay` - Arrangement to pay
+          * `sustained_delinquency` - General code to indicate sustained delinquency
+          * `debt_assignment` - Debt assignment
+          * `default` - Default
+          * `debt_management_program` - Debt management program
+          * `deferred_start` - Deferred start
+          * `dormant_inactive_account` - Dormant/inactive account
+          * `third_party_payment` - Supplied when full or part payments are being made by a third party, such as an Insurance Company, DSS or tenants
+          * `insurance_claim_pending` - Insurance claim pending
+          * `low_start_repayment_plan` - Low start repayment plan applies
+          * `minimum_payment` - Minimum payment made
+          * `overpayment_in_arrears` - Overpayment (in arrears)
+          * `okay` - Okay (repayment requirements fulfilled)
+          * `overpayment` - Overpayment
+          * `payment_holiday` - Payment holiday
+          * `partial_settlement` - Partial settlement
+          * `query` - Query (account under review)
+          * `account_reinstatement` - Account re-instatement
+          * `enforced_repossession` - Enforced repossession
+          * `satisfied` - Satisfied
+          * `settled_closed` - Settled/closed
+          * `unclassified` - Unclassified or recently opened account payment delay
+          * `voluntary_arrangement` - Voluntary arrangement
+          * `voluntary_repossession` - Voluntary repossession
+          * `voluntary_termination` - Voluntary termination
+    PaymentStatus:
+      type: string
+      enum:
+        - no_update_received
+        - up_to_date
+        - unknown
+        - one_pae
+        - two_pae
+        - three_pae
+        - four_pae
+        - five_pae
+        - six_pae
+        - default
+      example: up_to_date
+      description: |
+        The payment status code for the account:
+          * `no_update_received` - No update received
+          * `up_to_date` - Account up-to-date or less than the equivalent of one PAE (payment arrears equivalent) in arrears
+          * `unknown` - Unknown or unspecified
+          * `one_pae` - Account in arrears by the equivalent of at least one but less than two PAE
+          * `two_pae` - Account in arrears by the equivalent of at least two but less than three PAE
+          * `three_pae` - Account in arrears by the equivalent of at least three but less than four PAE
+          * `four_pae` - Account in arrears by the equivalent of at least four but less than five PAE
+          * `five_pae` - Account in arrears by the equivalent of at least five but less than six PAE
+          * `six_pae` - Account in arrears by six or more PAE
+          * `default` - Account is in Default
+    ShareAccountStatus:
+      type: string
+      enum:
+        - default
+        - satisfied
+        - normal
+        - delinquent
+        - settled
+      example: normal
+      description: |
+        The status code for the share account:
+          * `default` - Default
+          * `satisfied` - Satisfied
+          * `normal` - Normal
+          * `delinquent` - Delinquent
+          * `settled` - Settled
+    Currency:
+      type: string
+      enum:
+        - EUR
+        - GBP
+        - USD
+      description: |
+        The iso currency code
+          * `EUR` - Euro
+          * `GBP` - Great British Pound
+          * `USD` - United States Dollar
+      example: GBP
+    AccountCode:
+      type: string
+      enum:
+        - asset_discounting
+        - agricultural_finance
+        - airtime_agreement_monthly
+        - airtime_agreement_upfront
+        - balloon_repayment_loan
+        - book_music_video_club
+        - budget_account
+        - balloon_hp
+        - buildings_insurance
+        - bank
+        - unsecured_business_loan
+        - residential_buy_to_let
+        - bnpl
+        - broadband
+        - brewery_loan
+        - business_line
+        - builders_merchant_credit
+        - current_account
+        - cable
+        - credit_card
+        - crown_debt
+        - charge_card
+        - contents_insurance
+        - commercial_mortgage
+        - company_credit_card
+        - personal_contract_purchase
+        - consumer_goods_rental
+        - unsecured_car_loan
+        - council_tax
+        - credit_sale
+        - conditional_sale
+        - combined_credit_account
+        - consolidated_debt
+        - debit_card
+        - bank_default
+        - deffered_hire_purchase
+        - shared_ownership_mortgage
+        - deffered_payment
+        - dual_fuel
+        - e_cash
+        - education
+        - electricity
+        - employer_loan
+        - water
+        - fuel_card
+        - fixed_term_deferred_payment_loan
+        - finance_lease
+        - flexible_mortgage
+        - residential_first_mortgage_with_investment_offset
+        - further_secured_loan
+        - factoring
+        - gambling
+        - gas_even_payment
+        - general_insurance
+        - guarantee_liability
+        - home_shopping_agency
+        - home_credit
+        - home_shopping_direct
+        - household_insurance
+        - hire_purchase
+        - home_shopping
+        - home_shopping_cash
+        - internet_credit_line
+        - advance_against_income
+        - residential_second_mortgage_with_investment_offset
+        - insurance
+        - internet_shopping
+        - loan_unspecified_type
+        - life_policy_loan
+        - local_rates_even_payment_scheme
+        - lease
+        - landline_telephone_even_payment
+        - mail_order_agency
+        - multifunctional_card
+        - mortgage_unspecified_type
+        - motor_insurance
+        - motor_finance_loan
+        - semi_commercial_first_mortgage
+        - mail_order
+        - mortgage_protection
+        - mortgage_and_unsecured_loan
+        - multi_communications
+        - semi_commercial_second_mortgage
+        - option_account
+        - overdraft
+        - oil
+        - operating_lease
+        - investment_offset_mortgage
+        - other_rental
+        - personal_health_insurance
+        - payment_protection
+        - property_rental
+        - airtime_agreement_quarterly
+        - electricity_quarterly
+        - gas_quarterly
+        - landline_telephone_quarterly
+        - utility_quarterly
+        - water_quarterly
+        - revolving_credit
+        - repayment_grant
+        - retail_store_card
+        - rental_agreement
+        - stock_broking_account
+        - secured_business_loan
+        - secured_car_loan
+        - secured_loan
+        - student_loan
+        - residential_second_mortgage
+        - offset_loan
+        - satellite
+        - stationery_supplier
+        - store_card
+        - offset_current_account
+        - term_loan
+        - telecommunications_supplier
+        - trade_credit
+        - tv_shopping
+        - utility_even_payment
+        - unsecured_loan
+        - utility
+        - variable_subscription
+        - weekly_installment_plan
+        - residential_first_time_buyer
+        - standby_credit
+        - zero_finance_loan
+        - hundered_plus_ltv_mortgage
+      example: balloon_repayment_loan
+      description: |
+        The type of share account:
+          * `asset_discounting` - Asset Discounting
+          * `agricultural_finance` - Agricultural Finance
+          * `airtime_agreement_monthly` - Airtime Agreement Monthly
+          * `airtime_agreement_upfront` - Airtime Agreement Upfront
+          * `balloon_repayment_loan` - Balloon Repayment Loan
+          * `book_music_video_club` - Book Music Video Club
+          * `budget_account` - Budget Account
+          * `balloon_hp` - Balloon HP
+          * `buildings_insurance` - Buildings Insurance
+          * `bank` - Bank
+          * `unsecured_business_loan` - Unsecured Business Loan
+          * `residential_buy_to_let` - Residential Buy To Let
+          * `bnpl` - Buy Now Pay Later
+          * `broadband` - Broadband
+          * `brewery_loan` - Brewery Loan
+          * `business_line` - Business Line
+          * `builders_merchant_credit` - Builders Merchant Credit
+          * `current_account` - Current Account
+          * `cable` - Cable
+          * `credit_card` - Credit Card
+          * `crown_debt` - Crown Debt
+          * `charge_card` - Charge Card
+          * `contents_insurance` - Contents Insurance
+          * `commercial_mortgage` - Commercial Mortgage
+          * `company_credit_card` - Company Credit Card where the individual responsible for debt
+          * `personal_contract_purchase` - Personal Contract Purchase
+          * `consumer_goods_rental` - Consumer Goods Rental
+          * `unsecured_car_loan` - Unsecured Car Loan
+          * `council_tax` - Council Tax
+          * `credit_sale` - Credit Sale
+          * `conditional_sale` - Conditional Sale
+          * `combined_credit_account` - Combined Credit Account
+          * `consolidated_debt` - Consolidated Debt
+          * `debit_card` - Debit Card
+          * `bank_defalut` - Bank Default
+          * `deferred_hp` - Deferred Hire Purchase
+          * `shared_ownership_mortgage` - Shared Ownership Mortgage (Housing Association)
+          * `deferred_payment` - Deferred Payment
+          * `dual_fuel` - Dual Fuel
+          * `e_cash` - E-Cash
+          * `education` - Education
+          * `electricity_even_payment` - Electricity (even payment)
+          * `employer_loan` - Employer Loan
+          * `water_even_payment` - Water (even payment)
+          * `fuel_card` - Fuel Card (individual responsible for debt)
+          * `fixed_term_deferred_payment_loan` - Fixed Term Deferred Payment Loan
+          * `finance_lease` - Finance Lease
+          * `flexible_mortgage` - Flexible Mortgage
+          * `first_mortgage_with_investment_offset` - First Mortgage with Investment Offset
+          * `further_secured_loan` - Further Secured Loan
+          * `factoring` - Factoring
+          * `gambling` - Gambling
+          * `gas_even_payment` - Gas (even payment)
+          * `general_insurance` - General Insurance
+          * `guarantee_liability` - Guarantee Liability
+          * `home_shopping_agency` - Home Shopping Agency
+          * `home_credit` - Home Credit
+          * `home_shopping_direct` - Home Shopping Direct
+          * `household_insurance` - Household Insurance
+          * `hire_purchase` - Hire Purchase
+          * `home_shopping` - Home Shopping
+          * `home_shopping_cash` - Home Shopping Cash
+          * `internet_credit_line` - Internet Credit Line
+          * `advance_against_income` - Advance Against Income
+          * `residential_second_mortgage_with_investment_offset` - Residential Second Mortgage with Investment Offset
+          * `insurance` - Insurance
+          * `internet_shopping` - Internet Shopping
+          * `loan_unspecified_type` - Loan (Unspecified Type)
+          * `life_policy_loan` - Life Policy Loan
+          * `local_rates_even_payment_scheme` - Local Rates (even payment scheme)
+          * `lease` - Lease
+          * `landline_telephone_even_payment` - Landline Telephone (even payment)
+          * `mail_order_agency` - Mail Order Agency
+          * `multifunctional_card` - Multifunctional Card
+          * `mortgage_unspecified_type` - Mortgage (Unspecified Type)
+          * `motor_insurance` - Motor Insurance
+          * `motor_finance_loan` - Motor Finance Loan
+          * `semi_commercial_first_mortgage` - Semi Commercial First Mortgage
+          * `mail_order` - Mail Order
+          * `mortgage_protection` - Mortgage Protection
+          * `mortgage_and_unsecured_loan` - Mortgage and Unsecured Loan
+          * `multi_communications` - Multi Communications
+          * `semi_commercial_second_mortgage` - Semi Commercial Second Mortgage
+          * `mail_order` - Mail Order
+          * `mortgage_protection` - Mortgage Protection
+          * `mortgage_and_unsecured_loan` - Mortgage and Unsecured Loan
+          * `multi_communications` - Multi Communications
+          * `semi_commercial_second_mortgage` - Semi Commercial Second Mortgage
+          * `option_account` - Option Account
+          * `overdraft` - Overdraft
+          * `oil` - Oil
+          * `operating_lease` - Operating Lease
+          * `investment_offset_mortgage` - Investment Offset Mortgage
+          * `other_rental` - Other Rental
+          * `personal_health_insurance` - Personal Health Insurance
+          * `payment_protection` - Payment Protection
+          * `property_rental` - Property Rental
+          * `airtime_agreement_quarterly` - Airtime Agreement (quarterly)
+          * `electricity_quarterly` - Electricity (quarterly)
+          * `gas_quarterly` - Gas (quarterly)
+          * `landline_telephone_quarterly` - Landline Telephone (quarterly)
+          * `utility_quarterly` - Utility (quarterly)
+          * `water_quarterly` - Water (quarterly)
+          * `revolving_credit` - Revolving Credit
+          * `repayment_grant` - Repayment Grant
+          * `retail_store_card` - Retail Store Card
+          * `rental_agreement` - Rental Agreement
+          * `stock_broking_account` - Stock Broking Account
+          * `secured_business_loan` - Secured Business Loan
+          * `secured_card_loan` - Secured Card Loan
+          * `secured_car_loan` - Secured Car Loan
+          * `secured_loan` - Secured Loan
+          * `student_loan` - Student Loan
+          * `residential_second_mortgage` - Residential Second Mortgage
+          * `offset_loan` - Offset Loan
+          * `satellite` - Satellite
+          * `stationery_supplier` - Stationery Supplier
+          * `store_card` - Store Card
+          * `offset_current_account` - Offset Current Account
+          * `term_loan` - Term Loan
+          * `telecommunications_supplier` - Telecommunications Supplier
+          * `trade_credit` - Trade Credit
+          * `tv_shopping` - TV Shopping
+          * `utility_even_payment` - Utility (even payment)
+          * `unsecured_loan` - Unsecured Loan
+          * `utility` - Utility
+          * `variable_subscription` - Variable Subscription
+          * `weekly_installment_plan` - Weekly Installment Plan
+          * `residential_first_time_buyer` - Residential First Time Buyer
+          * `standby_credit` - Standby Credit
+          * `zero_finance_loan` - Zero Finance Loan
+          * `hundered_plus_ltv_mortgage` - 100% + LTV Mortgage
+    GroupCode:
+      type: string
+      enum:
+        - loan_and_installment_credit
+        - mortgage
+        - revolving_credit_and_budget
+        - telecommunications
+        - utilities
+        - home_shopping
+        - bank
+        - miscellaneous
+        - insurance
+        - home_credit
+      example: loan_and_installment_credit
+      description: |
+        The group of the share account
+          * `loan_and_installment_credit` - Loan and Installment Credit
+          * `mortgage` - Mortgage
+          * `revolving_credit_and_budget` - Revolving Credit and Budget
+          * `telecommunications` - Telecommunications
+          * `utilities` - Utilities
+          * `home_shopping` - Home Shopping
+          * `bank` - Bank
+          * `miscellaneous` - Miscellaneous
+          * `insurance` - Insurance
+          * `home_credit` - Home Credit
+    FrequencyCode:
+      type: string
+      enum:
+        - annually
+        - deferred
+        - fortnightly
+        - four_weekly
+        - monthly
+        - periodically
+        - quarterly
+        - single_payment
+        - weekly
+        - unknown
+      example: monthly
+      description: |
+        The frequency of the repayment
+          * `annually` - Annually
+          * `deferred` - Deferred
+          * `fortnightly` - Fortnightly (every 2 weeks)
+          * `four_weekly` - Every 4 weeks
+          * `monthly` - Monthly
+          * `periodically` - Periodically
+          * `quarterly` - Quarterly
+          * `single_payment` - Single Payment
+          * `weekly` - Weekly
+          * `unknown` - Unknown
+    Account:
+      type: object
+      properties:
+        supplier:
+          type: object
+          properties:
+            name:
+              type: string
+              nullable: true
+              example: Slipstream
+              description: The supplier name for the account
+            code:
+              $ref: "#/components/schemas/SupplierCode"
+              nullable: true
+        holder:
+          type: object
+          properties:
+            firstname:
+              $ref: "#/components/schemas/firstname"
+              nullable: true
+              description: The account holder's first name
+            othername:
+              $ref: "#/components/schemas/othername"
+              nullable: true
+              description: The account holder's middle names or initials
+            lastname:
+              $ref: "#/components/schemas/lastname"
+              nullable: true
+              description: The account holder's lastname
+            dob:
+              $ref: "#/components/schemas/dob"
+              nullable: true
+              description: The account holder's date of birth
+            address:
+              allOf:
+                - $ref: "#/components/schemas/Address"
+                - type: object
+                - nullable: true
+            status:
+              $ref: "#/components/schemas/AccountHolderStatus"
+            startedAt:
+              $ref: "#/components/schemas/optional"
+              description:
+                The date when account holder first appeared on the account
+            endedAt:
+              $ref: "#/components/schemas/optional"
+              description: The date when account holder left the account
+          required:
+            - status
+        default:
+          type: object
+          nullable: true
+          properties:
+            originalAmount:
+              type: number
+              format: int32
+              example: 1000
+              description:
+                The original default balance to the nearest unit e.g. 1000 =
+                £1000
+            terminationAmount:
+              type: number
+              format: int32
+              nullable: true
+              example: 1000
+              description:
+                The amount of the default balance at the time of termination to
+                the nearest unit e.g. 1000 = £1000
+            defaultedAt:
+              $ref: "#/components/schemas/optional"
+              nullable: true
+              description: The date when the account defaulted
+            satisfiedAt:
+              $ref: "#/components/schemas/optional"
+              nullable: true
+              description: The date when the account was satisfied
+            respossessedAt:
+              $ref: "#/components/schemas/optional"
+              nullable: true
+              description: The date when the account was repossessed
+          required:
+            - originalAmount
+        delinquent:
+          type: object
+          nullable: true
+          properties:
+            balance:
+              type: number
+              format: int32
+              example: 1000
+              description:
+                The delinquency balance to the nearest unit e.g. 500 = £500
+            delinquentAt:
+              $ref: "#/components/schemas/optional"
+              nullable: true
+              description: The date when the account became delinquent
+        history:
+          type: array
+          items:
+            type: object
+            properties:
+              amount:
+                type: number
+                format: int32
+                example: 500
+                description:
+                  The balance amount to the nearest unit e.g. 500 = £500
+              limitAmount:
+                type: number
+                format: int32
+                nullable: true
+                example: 1500
+                description:
+                  The credit limit to the nearest unit e.g. 1500 = £1,500
+              statementAmount:
+                type: number
+                format: int32
+                nullable: true
+                example: 500
+                description:
+                  The statement balance amount to the nearest unit e.g. 500 =
+                  £500
+              paymentAmount:
+                type: number
+                format: int32
+                nullable: true
+                example: 1000
+                description:
+                  The payment amount to the nearest unit e.g. 1000 = £1,000
+              accountStatus:
+                $ref: "#/components/schemas/AccountStatus"
+              paymentStatus:
+                $ref: "#/components/schemas/PaymentStatus"
+              cashAdvance:
+                type: object
+                properties:
+                  count:
+                    type: number
+                    format: int32
+                    nullable: true
+                    example: 1
+                    description: The number of cash advances for account
+                  amount:
+                    type: number
+                    format: int32
+                    nullable: true
+                    example: 500
+                    description: The total value of cash advances for account
+              recordedAt:
+                $ref: "#/components/schemas/optional"
+                description: The year and month of the history record
+            required:
+              - amount
+              - accountStatus
+              - paymentStatus
+              - recordedAt
+        details:
+          type: object
+          properties:
+            accountNumber:
+              type: string
+              nullable: true
+              example: TEST-294-50032
+              description: The account number
+            accountSuffix:
+              type: string
+              nullable: true
+              example: 1
+              description: The account suffix
+            isJoint:
+              type: boolean
+              nullable: true
+              example: true
+              description: Whether the account is a joint account
+            status:
+              $ref: "#/components/schemas/ShareAccountStatus"
+            currency:
+              $ref: "#/components/schemas/Currency"
+            balanceAmount:
+              type: number
+              format: int32
+              nullable: true
+              example: 500
+              description:
+                The balance amount to the nearest unit e.g. 500 = £500
+            intialAmount:
+              type: number
+              format: int32
+              nullable: true
+              example: 500
+              description:
+                The intial balance amount to the nearest unit e.g. 2500 =
+                £2,500. This could be opening balance or the first seen current
+                balance reported
+            limitAmount:
+              type: number
+              format: int32
+              nullable: true
+              example: 500
+              description:
+                The limit amount to the nearest unit e.g. 1500 = £1,500
+            arrangement:
+              type: object
+              properties:
+                startedAt:
+                  $ref: "#/components/schemas/optional"
+                  description: The date the arrangement started
+                endedAt:
+                  $ref: "#/components/schemas/optional"
+                  description: The date the arrangement ended
+            payment:
+              type: object
+              properties:
+                regularAmount:
+                  type: number
+                  format: int32
+                  nullable: true
+                  example: 500
+                  description:
+                    The regular payment amount to the nearest unit e.g. 500 =
+                    £500
+                expectedAmount:
+                  type: number
+                  format: int32
+                  nullable: true
+                  example: 500
+                  description:
+                    The expected payment amount to the nearest unit e.g. 500 =
+                    £500
+                actualAmount:
+                  type: number
+                  format: int32
+                  nullable: true
+                  example: 500
+                  description:
+                    The actual payment amount to the nearest unit e.g. 500 =
+                    £500
+                lumpAmount:
+                  type: number
+                  format: int32
+                  nullable: true
+                  example: 500
+                  description:
+                    The lump or balloon payment amount to the nearest unit e.g.
+                    500 = £500
+                penaltyInterestAmount:
+                  type: number
+                  format: int32
+                  nullable: true
+                  example: 500
+                  description:
+                    The penalty interest amount to the nearest unit e.g. 500 =
+                    £500
+                startedAt:
+                  $ref: "#/components/schemas/optional"
+                  description: The date the payment started
+            account:
+              type: object
+              properties:
+                code:
+                  $ref: "#/components/schemas/AccountCode"
+                  nullable: true
+                groupCode:
+                  $ref: "#/components/schemas/GroupCode"
+                  nullable: true
+                startedAt:
+                  $ref: "#/components/schemas/optional"
+                  description: The date the account started
+                endedAt:
+                  $ref: "#/components/schemas/optional"
+                  description: The date the account ended
+            repayment:
+              type: object
+              properties:
+                duration:
+                  type: number
+                  format: int32
+                  nullable: true
+                  example: 12
+                  description: The number of months for the repayment period
+                frequency:
+                  $ref: "#/components/schemas/FrequencyCode"
+              required:
+                - frequencyCode
+            behavioural:
+              type: object
+              description:
+                Returned only to customers who are authorised to see Behavioural
+                Data.
+              nullable: true
+              properties:
+                isPromotional:
+                  type: boolean
+                  example: false
+                  nullable: true
+                  description: Whether a promotional rate applies
+                hasMinimumPayment:
+                  type: boolean
+                  example: false
+                  nullable: true
+                  description:
+                    Whether a minimum payment has been made within accepted
+                    tolerances
+                statementBalance:
+                  type: number
+                  format: int32
+                  nullable: true
+                  example: 1000
+            updatedAt:
+              $ref: "#/components/schemas/optional"
+              description: The date the account was last updated
+          required:
+            - status
+            - currency
+            - agreement
+            - payment
+            - account
+            - repayment
+      required:
+        - supplier
+        - holder
+        - history
+        - details
+    GetCreditReport:
+      type: object
+      properties:
+        id:
+          type: string
+          example: srch_bPKKB3sYsukFanSsaBcMCMR2
+          description: Unique identifier for the object
+        match:
+          type: object
+          properties:
+            title:
+              $ref: "#/components/schemas/title"
+              nullable: true
+              description: The applicant's title
+            firstname:
+              $ref: "#/components/schemas/firstname"
+              description: The applicant's firstname
+            othername:
+              $ref: "#/components/schemas/othername"
+              nullable: true
+              description: The applicant's middle names or initials
+            lastname:
+              $ref: "#/components/schemas/lastname"
+              description: The applicant's lastname
+            dob:
+              $ref: "#/components/schemas/dob"
+              description: The applicant's date of birth
+            address:
+              allOf:
+                - $ref: "#/components/schemas/Address"
+                - type: object
+                  required:
+                    - startedAt
+                    - endedAt
+                  properties:
+                    startedAt:
+                      $ref: "#/components/schemas/optionalCurrent"
+                      description:
+                        The date the applicant moved into the residence
+                    endedAt:
+                      $ref: "#/components/schemas/optionalCurrent"
+                      example: null
+                      description:
+                        The date the applicant moved out of the residence
+            reportType:
+              type: string
+              enum:
+                - none
+                - address
+                - surname
+                - individual
+                - too_many
+                - non_dom
+              description: |
+                The type of report available for a given name and:
+                  * `none` - No match found
+                  * `address` - Address report
+                  * `surname` - Surname report
+                  * `individual` - Individual report
+                  * `too_many` - Too many matches
+                  * `non_dom` - Non domicile match
+              example: individual
+          required:
+            - title
+            - firstname
+            - othername
+            - lastname
+            - dob
+            - address
+            - reportType
+        summary:
+          allOf:
+            - $ref: "#/components/schemas/Summary"
+        accounts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Account"
+        scores:
+          type: object
+          properties:
+            trueVision:
+              type: number
+              format: int32
+              nullable: true
+              example: 770
+              description: The TransUnion TrueVision score
+            riskNavigator:
+              type: number
+              format: int32
+              nullable: true
+              example: 800
+              description: The Equifax Risk Navigator score
+      required:
+        - id
+        - match
+        - summary
+        - accounts
+    BaseConsumerAccount:
+      type: object
+      properties:
+        accountType:
+          type: string
+          enum:
+            - current_account
+            - hire_purchase
+            - unsecured_loan
+            - mortgage
+            - credit_card
+            - charge_card
+            - consumer_hire
+            - buy_now_pay_later
+            - telecoms
+            - utilities
+          example: current_account
+          description: |
+            The type of account.
+              * `current_account` - A current account with/without authorised overdraft
+              * `hire_purchase` - The merchandise remains the property of the lender until all repayments are completed
+              * `unsecured_loan` - A loan that is not secured against any asset
+              * `mortgage` - A loan secured against a property by a mortgage deed
+              * `credit_card` - A card with an agreed credit limit where the required payment is not the full balance outstanding
+              * `charge_card` - A card with an agreed credit limit where the required payment is the full balance outstanding
+              * `consumer_hire` - Where ownership of the merchandise or property remains with the lender
+              * `buy_now_pay_later` - A deferred payment scheme where the customer buys the merchandise or property and pays for it in instalments
+              * `telecoms` - A telecommunications account
+              * `utilities` - An account for utilities such as gas, electricity, water, etc.
+        jointStatus:
+          type: string
+          enum:
+            - primary
+            - secondary
+            - third_holder
+            - fourth_holder
+            - fifth_holder
+            - sixth_holder
+            - seventh_holder
+            - eighth_holder
+            - ninth_holder
+          example: primary
+          description: |
+            The status of the account holder if the account is shared by multiple people.
+              * `primary` - The primary account holder
+              * `secondary` - A secondary account holder
+              * `third_holder` - A third account holder
+              * `fourth_holder` - A fourth account holder
+              * `fifth_holder` - A fifth account holder
+              * `sixth_holder` - A sixth account holder
+              * `seventh_holder` - A seventh account holder
+              * `eighth_holder` - An eighth account holder
+              * `ninth_holder` - A ninth account holder
+        isTransient:
+          type: boolean
+          example: false
+          description: |
+            Indicates whether to create an association with 
+              * `true` - The account is a transient account
+              * `false` - The account is not a transient account
+        customerStatus:
+          type: string
+          nullable: true
+          enum:
+            - deceased
+            - gone_away
+            - debt_management
+            - partial_settlement
+            - third_party_payment
+            - voluntary_termination
+          example: null
+          description: |
+            The status of the customer.
+              * `deceased` - The customer has passed away
+              * `gone_away` - The customer has moved away
+              * `debt_management` - The customer is in a debt management plan
+              * `partial_settlement` - The customer has settled the account partially
+              * `third_party_payment` - The account is being paid by a third party e.g. Payment Protection Insurance
+              * `voluntary_termination` - The customer has terminated the account voluntarily
+        createdAt:
+          readOnly: true
+          type: string
+          format: date-time
+          example: "2019-07-26T00:00:00.000Z"
+          description: The date the account was opened
+        endedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+          description: The date the account was closed
+        defaultedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+          description: The date the account was defaulted
+    GetConsumerAccount:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              example: acc_bPKKB3sYsukFanSsaBcMCMR2
+              description: Unique identifier for the object
+            consumer:
+              oneOf:
+                - $ref: "#/components/schemas/GetConsumer"
+                - type: string
+                  example: con_bPKKB3sYsukFanSsaBcMCMR2
+                  description: The unique identifier for the consumer
+        - $ref: "#/components/schemas/BaseConsumerAccount"
+    CreateConsumerAccount:
+      allOf:
+        - type: object
+          properties:
+            consumer:
+              type: string
+              example: con_bPKKB3sYsukFanSsaBcMCMR2
+              description: Unique identifier for the object
+        - $ref: "#/components/schemas/BaseConsumerAccount"
+    Metadata:
+      description:
+        A key-value metadata object to be attached to the submitted record
+      example:
+        externalReference: p11d
+    Base:
+      properties:
+        account:
+          type: string
+          example: acc_bPKKB3sYsukFanSsaBcMCMR2
+          description:
+            The identifier for the consumer account that the event relates to
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+      required:
+        - id
+        - consumerAccount
+        - type
+        - amount
+    Delinquency:
+      properties:
+        delinquency:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+                - INACTIVE
+                - UNDER_REVIEW
+                - UNCLASSIFIED
+                - DEFAULT
+                - SETTLED
+                - ARRANGED_PAYMENT
+                - REPOSSESSED
+              description: |
+                The status of the account
+                  * `INACTIVE` - The account is inactive
+                  * `UNDER_REVIEW` - The account is under manual review
+                  * `UNCLASSIFIED` - The account has an unknown status
+                  * `DEFAULT` - The account is in default
+                  * `SETTLED` - The account has been settled
+                  * `ARRANGED_PAYMENT` - The account has an arranged payment plan
+                  * `REPOSSESSED` - The item that the account relates to has been repossessed
+              example: UNCLASSIFIED
+      required:
+        - delinquency
+    Flag:
+      properties:
+        flag:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+                - DECEASED
+                - GONE_AWAY
+                - DEBT_MANAGEMENT
+                - PARTIAL_SETTLEMENT
+                - PAID_BY_THIRD_PARTY
+                - VOLUNTARY_TERMINATION
+                - DEBT_ASSIGNED_NON_MEMBER
+                - DEBT_ASSIGNED_MEMBER
+              description: |
+                The status of the account
+                  * `DECEASED` - The consumer the account relates to is deceased
+                  * `GONE_AWAY` - The consumer the account relates to has left the last known address
+                  * `DEBT_MANAGEMENT` - The consumer the account relates to is in a debt management plan
+                  * `PARTIAL_SETTLEMENT` - The account has been partially settled
+                  * `PAID_BY_THIRD_PARTY` - The account debt has been paid by a third party, not the consumer
+                  * `VOLUNTARY_TERMINATION` - The account has been terminated voluntarily by the lender
+                  * `DEBT_ASSIGNED_NON_MEMBER` - The account debt has been sold to a SHARE non-member
+                  * `DEBT_ASSIGNED_MEMBER` - The account debt has been sold to a SHARE member
+              example: GONE_AWAY
+      required:
+        - flag
+    Payment:
+      properties:
+        payment:
+          type: object
+          properties:
+            amount:
+              type: number
+              description:
+                The value of the payment in whole units of currency (e.g. £1.00
+                = 1)
+              minimum: 1
+              example: 100
+            succeeded:
+              type: boolean
+              description: Whether the payment was successful
+      required:
+        - payment
+    CreateReportEvent:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Base"
+        - oneOf:
+            - $ref: "#/components/schemas/Delinquency"
+            - $ref: "#/components/schemas/Flag"
+            - $ref: "#/components/schemas/Payment"
+    GetReportEvent:
+      allOf:
+        - $ref: "#/components/schemas/CreateReportEvent"
+        - type: object
+          properties:
+            eventType:
+              type: string
+              enum:
+                - PAYMENT
+                - DELINQUENCY
+                - FLAG
+              example: PAYMENT
+              description: |
+                The type of account report event
+                  * `PAYMENT` - A payment on the account
+                  * `DELINQUENCY` - A delinquency on the account
+                  * `FLAG` - A flag for status change
+            createdAt:
+              type: string
+              format: date-time
+              example: "2018-01-01T00:00:00Z"
+              description: The date and time that the event was created
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+security:
+  - ApiKeyAuth: []
