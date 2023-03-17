@@ -29,6 +29,11 @@
       "name": "Changelog",
       "icon": "megaphone",
       "url": "changelog"
+    },
+    {
+      "name": "Contact",
+      "icon": "envelope",
+      "url": "mailto:dev@oneslipstream.com"
     }
   ],
   "navigation": [
@@ -69,6 +74,10 @@
           ]
         }
       ]
+    },
+    {
+      "group": "Changelog",
+      "pages": ["changelog/overview"]
     }
   ],
   "footerSocials": {
