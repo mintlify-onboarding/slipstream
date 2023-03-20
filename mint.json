@@ -9,9 +9,9 @@
   },
   "favicon": "/favicon.png",
   "colors": {
-    "primary": "#F81660",
-    "light": "#FF9CBD",
-    "dark": "#622246",
+    "primary": "#f8175f",
+    "light": "#f8175f",
+    "dark": "#612246",
     "anchors": { "from": "#F81660", "to": "#2724BE" }
   },
   "topbarCtaButton": {
@@ -84,5 +84,9 @@
     "twitter": "https://twitter.com/OneSlipstream",
     "linkedin": "https://www.linkedin.com/search/results/all/?fetchDeterministicClustersOnly=false&heroEntityKey=urn%3Ali%3Aorganization%3A76131847&keywords=slipstream&origin=RICH_QUERY_TYPEAHEAD_HISTORY&position=0&searchId=c3cd0049-0a1f-404d-ad7f-d42f1dae071f&sid=rQW",
     "website": "https://oneslipstream.com/"
+  },
+  "backgroundImage": "/background.png",
+  "modeToggle": {
+    "default": "dark"
   }
 }
